@@ -539,7 +539,7 @@ class MemoryAsContextTransformer(Module):
         is_first_neural_mem = True
 
         # mem, attn, and feedforward layers
-
+    
         for layer in layers:
             is_first = layer == 1
 

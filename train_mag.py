@@ -22,7 +22,7 @@ from torch.utils.data import DataLoader, Dataset
 from adam_atan2_pytorch import AdoptAtan2
 
 from titans_pytorch import (
-    MemoryAsContextTransformer,
+    MemoryAsGateTransformerNoPersist,
     MemoryMLP,
     MemoryAttention
 )
@@ -108,21 +108,21 @@ else:
 
 # instantiate memory-as-context transformer
 
-model = MemoryAsContextTransformer(
+model = MemoryAsGateTransformerNoPersist(
     num_tokens = 256,
     dim = 384,
     depth = 8,
     segment_len = WINDOW_SIZE,
-    num_persist_mem_tokens = NUM_PERSIST_MEM,
-    num_longterm_mem_tokens = NUM_LONGTERM_MEM,
+    # num_persist_mem_tokens = NUM_PERSIST_MEM,
+    # num_longterm_mem_tokens = NUM_LONGTERM_MEM,
     neural_memory_layers = NEURAL_MEM_LAYERS,
     neural_memory_segment_len = NEURAL_MEM_SEGMENT_LEN,
     neural_memory_batch_size = NEURAL_MEM_BATCH_SIZE,
-    neural_mem_gate_attn_output = NEURAL_MEM_GATE_ATTN_OUTPUT,
+    # neural_mem_gate_attn_output = NEURAL_MEM_GATE_ATTN_OUTPUT,
     neural_mem_weight_residual = NEURAL_MEM_WEIGHT_RESIDUAL,
     neural_memory_qkv_receives_diff_views = NEURAL_MEM_QKV_RECEIVES_DIFF_VIEW,
-    use_flex_attn = USE_FLEX_ATTN,
-    sliding_window_attn = SLIDING_WINDOWS,
+    # use_flex_attn = USE_FLEX_ATTN,
+    # sliding_window_attn = SLIDING_WINDOWS,
     neural_memory_model = neural_memory_model,
     neural_memory_kwargs = dict(
         dim_head = 64,
@@ -174,8 +174,6 @@ for i in tqdm.tqdm(range(NUM_BATCHES), mininterval = 10., desc = 'training'):
     model.train()
 
     pytorch_total_params = sum(p.numel() for p in model.parameters())
-    print(pytorch_total_params)
-    exit()
 
     for __ in range(GRADIENT_ACCUMULATE_EVERY):
         loss = model(next(train_loader), return_loss = True)
